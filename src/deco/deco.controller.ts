@@ -1,17 +1,25 @@
-import { Controller, Get } from '@nestjs/common';
-import { ClassDeco1 } from './decorators/class-deco1.decorator';
-import { ParamDeco1 } from './decorators/param-deco1.decorator';
-import { DuplicatePipe } from '../pipes/duplicate.pipe';
-import { Color, Colors } from './decorators/meta-deco1.decorator';
+import { Controller, Get, Query, UsePipes } from '@nestjs/common';
+import { ClassInfoTrace } from './decorators/class-info-trace';
+import { Result } from './types';
+import { Required, Validate } from './decorators/validate.decorator';
+import { DumpDecoratorParams } from './decorators/dump-params.decorator';
 
 @Controller('deco')
+@ClassInfoTrace
+@DumpDecoratorParams
 export class DecoController {
   text: string;
 
-  @Get(':val')
-  @ClassDeco1()
-  @Colors(Color.BLACK, Color.RED)
-  test(@ParamDeco1('val', DuplicatePipe) str: string): string {
-    return str;
+  @UsePipes()
+  @Get('test2')
+  @DumpDecoratorParams
+  test2(): string {
+    return 'ok';
+  }
+
+  @Get('testValid')
+  @Validate
+  validTest(@Query('param1') @Required @DumpDecoratorParams param1: string, @Query('param2') @Required @DumpDecoratorParams param2: string): Result {
+    return { message: 'ok' };
   }
 }
