@@ -8,14 +8,20 @@ export enum DecisionType {
   Role,
 }
 
-export interface DecisionRoot {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DecisionItem {}
 
-export interface Decision extends DecisionRoot {
+export class Decision implements DecisionItem {
   type: DecisionType;
   data: any;
 }
 
-export interface Decisions extends DecisionRoot {
+export class Decisions implements DecisionItem {
+  items: DecisionItem[];
   op: Op;
-  decisions: Decision[];
+
+  constructor(items: DecisionItem[], op: Op) {
+    this.items = items;
+    this.op = op;
+  }
 }

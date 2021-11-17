@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UsePipes } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, UsePipes } from '@nestjs/common';
 import { ClassInfoTrace } from './decorators/class-info-trace';
 import { Result } from './types';
 import { Required, Validate } from './decorators/validate.decorator';
@@ -21,5 +21,10 @@ export class DecoController {
   @Validate
   validTest(@Query('param1') @Required @DumpDecoratorParams param1: string, @Query('param2') @Required @DumpDecoratorParams param2: string): Result {
     return { message: 'ok' };
+  }
+
+  @UseGuards()
+  test(): void {
+    const a = 1;
   }
 }
