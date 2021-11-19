@@ -5,8 +5,8 @@ export class DecisionProcessor {
     if (item instanceof Decision) {
       return DecisionProcessor.evalDecision(item as Decision);
     } else if (item instanceof Decisions) {
-      const desc = (item as Decisions).items;
-      return DecisionProcessor.process();
+/*      const desc = (item as Decisions).items;
+      return DecisionProcessor.process();*/
     }
   }
 
