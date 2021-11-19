@@ -1,16 +1,21 @@
-import { Decision, DecisionItem, Decisions } from './decision-types';
+import { Decision, DecisionItem, Decisions, DecisionType } from './decision-types';
 
 export class DecisionProcessor {
   static process(item: DecisionItem): boolean {
     if (item instanceof Decision) {
       return DecisionProcessor.evalDecision(item as Decision);
     } else if (item instanceof Decisions) {
-      const desc = (item as Decisions).items;
-      return DecisionProcessor.process();
+      return DecisionProcessor.process(item);
     }
   }
 
-  static evalDecision(Decision): boolean {
+  static evalDecision(decision: Decision): boolean {
+    switch (decision.type) {
+      case DecisionType.CurrentUser:
+        break;
+      case DecisionType.Role:
+        break;
+    }
     return true;
   }
 }
