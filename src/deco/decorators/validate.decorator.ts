@@ -13,11 +13,12 @@ export function Validate(target: any, propertyName: string, descriptor: Property
   const method = descriptor.value!;
 
   if (descriptor.get) {
-    const val = descriptor.get()
+    const val = descriptor.get();
     console.log('Value is:', val);
   }
 
   descriptor.value = function (...args) {
+    console.log('Method parameters: ', args);
     const requiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName);
     if (requiredParameters) {
       for (const parameterIndex of requiredParameters) {
