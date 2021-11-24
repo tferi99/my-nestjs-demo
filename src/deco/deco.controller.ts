@@ -1,14 +1,14 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, UseGuards, UsePipes } from '@nestjs/common';
 import { ClassInfoTrace } from './decorators/class-info-trace';
 import { Result } from './types';
 import { Required, Validate } from './decorators/validate.decorator';
 import { DumpDecoratorParams } from './decorators/dump-params.decorator';
-import { UserData } from './decorators/user-data.decorator';
 import { User } from '../model/user';
-import { CurrentUserDecision, Decision, Decisions, DecisionType, Op } from '../decision/decision-types';
-import { AuthDecision } from './decorators/auth-decision.decorator';
-import { MarkedParam } from './decorators/param-to-metadata.decorator';
-import { AuthGuard } from '../auth/auth.guard';
+import { DecisionExpr } from '../decision/auth-decision.decorator';
+import { ParamId } from './decorators/param-to-metadata.decorator';
+import { DecisionGuard } from '../decision/decision.guard';
+import { Decisions, Op } from '../decision/decisions';
+import { CurrentUserDecision } from '../decision/current-user-decision';
 
 @Controller('deco')
 @ClassInfoTrace
@@ -29,19 +29,21 @@ export class DecoController {
     return { message: 'ok' };
   }
 
-  @Post('checkUser')
-  @AuthDecision(new Decisions(Op.AND, [new Decision(DecisionType.CurrentUser)]))
-  checkUser(cica: string, @UserData('id') @Body() u: User): any {
-    return { hello: u.name };
-  }
-
-  @Post('checkUser2')
-  @AuthDecision(new Decisions(Op.AND, [
-    new CurrentUserDecision({ markId: 'user', func: (user: User) => user.id })
+  /**
+   * Only current user OR root can update user.
+   *
+   * @param cica
+   * @param u
+   * @param etc
+   */
+  @Put('user')
+  @DecisionExpr(new Decisions(Op.AND, [
+    new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })
   ]))
-  @UseGuards(AuthGuard)
-  checkUser2(@MarkedParam('cica') cica: string, @MarkedParam('user') @Body() u: User, @MarkedParam('etc') etc): any {
-    const d = new CurrentUserDecision({ markId: 'user', func: (user: User) => user.id });
+  @UseGuards(DecisionGuard)
+  @DumpDecoratorParams('checkUser2 method')
+  updateUser(@ParamId('cica') cica: string, @ParamId('user') @Body() u: User, @ParamId('etc') etc): any {
+    //const d = new CurrentUserDecision({ markId: 'user', func: (user: User) => user.id });
     return { hello: u.name };
   }
 }

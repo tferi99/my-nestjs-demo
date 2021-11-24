@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DecisionProcessor } from '../decision/decision-processor';
+import { DecisionProcessorSevice } from '../decision/decision-processor.service';
 
 @Injectable()
 export class DecoService {
   testDecision(): void {
-    DecisionProcessor.process(undefined);
+    DecisionProcessorSevice.process(undefined);
   }
 }
