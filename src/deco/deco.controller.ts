@@ -3,7 +3,7 @@ import { ClassInfoTrace } from './decorators/class-info-trace';
 import { Result } from './types';
 import { Required, Validate } from './decorators/validate.decorator';
 import { DumpDecoratorParams } from './decorators/dump-params.decorator';
-import { User } from '../model/user';
+import { User } from '../auth/user';
 import { DecisionExpr } from '../decision/auth-decision.decorator';
 import { ParamId } from './decorators/param-to-metadata.decorator';
 import { DecisionGuard } from '../decision/decision.guard';

@@ -1,4 +1,4 @@
-import { User } from '../../model/user';
+import { User } from '../../auth/user';
 import { createParamDecorator, ExecutionContext, HttpException, HttpStatus, SetMetadata } from '@nestjs/common';
 import { DuplicatedException } from '../exception/exceptions';
 
