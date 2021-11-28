@@ -9,6 +9,7 @@ import { ParamId } from './decorators/param-to-metadata.decorator';
 import { DecisionGuard } from '../decision/decision.guard';
 import { Decisions, Op } from '../decision/decisions';
 import { CurrentUserDecision } from '../decision/current-user-decision';
+import { HttpBasicAuthGuard } from '../auth/http-basic-auth-guard';
 
 @Controller('deco')
 @ClassInfoTrace
@@ -16,7 +17,14 @@ import { CurrentUserDecision } from '../decision/current-user-decision';
 export class DecoController {
   text: string;
 
-  @UsePipes()
+  @Get('test')
+  @DumpDecoratorParams('test method')
+  @UseGuards(HttpBasicAuthGuard)
+  test(): string {
+    console.log('test');
+    return 'ok';
+  }
+
   @Get('test2')
   @DumpDecoratorParams('test2 method')
   test2(): string {

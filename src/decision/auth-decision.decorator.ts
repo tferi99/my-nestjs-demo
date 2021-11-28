@@ -1,8 +1,8 @@
-import { USER_DATA_DESCRIPTOR_KEY, UserDataDescriptor } from '../deco/decorators/user-data.decorator';
 import { HttpStatus } from '@nestjs/common';
 import { MissingRequiredException } from '../deco/exception/exceptions';
 import { PARAMS_IDS_KEY, ParamIndexes } from '../deco/decorators/param-to-metadata.decorator';
 import { Decision } from './decision-types';
+import { USER_DATA_DESCRIPTOR_KEY, UserDataDescriptor } from '../../dist/deco/decorators/user-data.decorator';
 
 export function DecisionExpr(data: Decision) {
   const prefix = '    # AuthDecision: ';
