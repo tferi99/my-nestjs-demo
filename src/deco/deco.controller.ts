@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Query, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, Req, UseGuards, UsePipes } from '@nestjs/common';
 import { ClassInfoTrace } from './decorators/class-info-trace';
 import { Result } from './types';
 import { Required, Validate } from './decorators/validate.decorator';
@@ -20,8 +20,8 @@ export class DecoController {
   @Get('test')
   @DumpDecoratorParams('test method')
   @UseGuards(HttpBasicAuthGuard)
-  test(): string {
-    console.log('test');
+  test(@Req() req): string {
+    console.log('test - logged in:', req.user);
     return 'ok';
   }
 
@@ -48,8 +48,8 @@ export class DecoController {
   @DecisionExpr(new Decisions(Op.AND, [
     new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })
   ]))
-  @UseGuards(DecisionGuard)
-  @DumpDecoratorParams('checkUser2 method')
+  @UseGuards(HttpBasicAuthGuard, DecisionGuard)
+  @DumpDecoratorParams('updateUser method')
   updateUser(@ParamId('cica') cica: string, @ParamId('user') @Body() u: User, @ParamId('etc') etc): any {
     //const d = new CurrentUserDecision({ markId: 'user', func: (user: User) => user.id });
     return { hello: u.name };

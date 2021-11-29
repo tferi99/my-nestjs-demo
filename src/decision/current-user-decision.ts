@@ -6,9 +6,9 @@ export interface CurrentUserProvider {
 }
 
 export class CurrentUserDecision implements Decision {
-  userIdRetriever: UserIdFromParam;
+  userIdRetriever: UserIdRetriever;
 
-  constructor(userIdRetriever: UserIdFromParam) {
+  constructor(userIdRetriever: UserIdRetriever) {
     this.userIdRetriever = userIdRetriever;
   }
 
@@ -21,7 +21,7 @@ export class CurrentUserDecision implements Decision {
 
 export type UserIdRetrieveFunction = (data: any) => number; // User.id is number
 
-export interface UserIdFromParam {
+export interface UserIdRetriever {
   sourceParamId: string;
   func?: UserIdRetrieveFunction;
 }
