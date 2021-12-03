@@ -6,7 +6,7 @@ import { GrdModule } from './grd/grd.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [DecoModule, AuthModule],
+  imports: [DecoModule, GrdModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

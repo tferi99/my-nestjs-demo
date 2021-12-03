@@ -1,8 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { DECO_PREFIX } from './deco-constants';
 
-export const RequestParamDeco = createParamDecorator((data: string, ctx: ExecutionContext) => {
-  console.log(DECO_PREFIX + 'ParamDeco1: called', data);
+export const ParamDeco = createParamDecorator((data: any, ctx: ExecutionContext) => {
+  console.log('RequestParamDeco: called', data);
   const request = ctx.switchToHttp().getRequest();
   return request.params[data];
 });
