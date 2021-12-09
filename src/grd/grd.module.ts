@@ -10,11 +10,11 @@ import { Global2Guard } from './guards/global2.guard';
     GrdService,
     {
       provide: APP_GUARD,
-      useClass: Global2Guard,
+      useClass: Global1Guard,
     },
     {
       provide: APP_GUARD,
-      useClass: Global1Guard,
+      useClass: Global2Guard,
     },
   ],
   controllers: [GrdController],
