@@ -1,21 +1,27 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { ENABLE_GUARD_KEY } from '../decorators/enable-guard.decorator';
+import {
+  ENABLE_GUARD_CONFIGS_KEY,
+  ENABLE_GUARD_KEY, GUARD_ENABLED_DEFAULT,
+  GuardConfig,
+  GuardTarget,
+} from '../decorators/enable-guard.decorator';
 
 @Injectable()
 export class Global1Guard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    const enabled = this.reflector.getAllAndOverride<boolean>(ENABLE_GUARD_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    console.log('Global1Guard - enabled:' + enabled);
-    if (enabled != undefined) {
-      return enabled;
+    let enabled = GUARD_ENABLED_DEFAULT
+    const existingGuardConfigs = this.reflector.get<Map<GuardTarget, GuardConfig>>(ENABLE_GUARD_CONFIGS_KEY, context.getHandler());
+    if (existingGuardConfigs !== undefined) {
+      const cfg = existingGuardConfigs.get(GuardTarget.G1);
+      if (cfg !== undefined) {
+        enabled = cfg.enabled;
+      }
     }
-    return true; // by default enabled
+    console.log('Global1Guard - enabled:' + enabled);
+    return enabled;
   }
 }

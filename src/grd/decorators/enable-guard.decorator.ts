@@ -19,15 +19,19 @@ export function EnableGuard(enabled: boolean) {
 }
 */
 
-export enum Global1GuardTarget {
-  G1, // Global1Guard
-  G2, // Global2Guard
+export enum GuardTarget {
+  G1 = 'G1', // Global1Guard
+  G2 = 'G2', // Global2Guard
+  T1 = 'T1', // Test1Guard
+  T2 = 'T2', // Test2Guard
 }
 
 export interface GuardConfig {
-  target: string | Global1GuardTarget;
+  target: GuardTarget;
   enabled: boolean;
 }
+
+export const GUARD_ENABLED_DEFAULT = true;
 
 /*export const EnableGuard = (guardConfig: GuardConfig) => {
   console.log('EnableGuard()', guardConfig);
@@ -44,13 +48,14 @@ export const EnableGuard = (guardConfig: GuardConfig) => {
 */
 export const EnableGuard = (guardConfig: GuardConfig) => {
   const factory = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    let configs: Map<Global1GuardTarget | string, GuardConfig> = Reflect.getMetadata(ENABLE_GUARD_CONFIGS_KEY, target, propertyKey);
-    if (configs === undefined) {
-      configs = new Map<Global1GuardTarget | string, GuardConfig>();
-      Reflect.defineMetadata(ENABLE_GUARD_CONFIGS_KEY, configs, descriptor.value);
-    }
-    configs.set(guardConfig.target, guardConfig);
+    const existingGuardConfigs: Map<GuardTarget, GuardConfig> = Reflect.getOwnMetadata(ENABLE_GUARD_CONFIGS_KEY, target, propertyKey) || new Map<GuardTarget, GuardConfig>();
+    Reflect.defineMetadata(ENABLE_GUARD_CONFIGS_KEY, existingGuardConfigs, descriptor.value);
+
+    existingGuardConfigs.set(guardConfig.target, guardConfig);
+    Reflect.defineMetadata( ENABLE_GUARD_CONFIGS_KEY, existingGuardConfigs, target, propertyKey);
+
+    console.log('EnableGuard changed:', existingGuardConfigs);
   }
   return factory;
 }
-let result = Reflect.getMetadata(metadataKey, target, propertyKey);
+
