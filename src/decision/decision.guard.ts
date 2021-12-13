@@ -2,34 +2,45 @@ import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/commo
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Reflector } from '@nestjs/core';
-import { Decision } from './decision-types';
 import { DECISION_DATA_KEY, DECISION_ARGS_PARAMS_KEY } from './decision-expr.decorator';
 import { DecisionProcessorSevice } from './decision-processor.service';
 import { ParamIndexes, PARAMS_IDS_KEY } from '../deco/decorators/param-to-metadata.decorator';
+import { Decision } from './decisions';
 
 @Injectable()
 export class DecisionGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-//    private decisionProcessorSevice: DecisionProcessorSevice,
+    private decisionProcessorSevice: DecisionProcessorSevice,
 //    private authService: AuthService
   ) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(ctx: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     console.log('DecisionGuard.canActivate()');
-    const roles: string[] = this.reflector.get<string[]>('roles', context.getHandler());
-    const decisionData: Decision = this.reflector.get<Decision>(DECISION_DATA_KEY, context.getHandler());
-    const methodArgs = this.reflector.get<any[]>(DECISION_ARGS_PARAMS_KEY, context.getHandler());
-    const paramIds = this.reflector.get<ParamIndexes>(PARAMS_IDS_KEY, context.getHandler());
-    const h: any = context.getHandler();
+    const handler = ctx.getHandler();
+
+    const decisionData: Decision = this.reflector.get<Decision>(DECISION_DATA_KEY, handler);
+    const markedParams: ParamIndexes = this.reflector.get<ParamIndexes>(PARAMS_IDS_KEY, handler);
+    const c = ctx.switchToHttp();
+
+
+    console.log('  DecisionGuard - decisonData:', decisionData);
+    console.log('  DecisionGuard - markedParams:', markedParams);
+//    console.log('  DecisionGuard - methodArgs:', methodArgs);
+
+/*    const roles: string[] = this.reflector.get<string[]>('roles', ctx.getHandler());
+
+    const methodArgs = this.reflector.get<any[]>(DECISION_ARGS_PARAMS_KEY, ctx.getHandler());
+    const paramIds = this.reflector.get<ParamIndexes>(PARAMS_IDS_KEY, ctx.getHandler());
+    const h: any = ctx.getHandler();
+
 
     console.log('  DecisionGuard - roles:', roles);
-    console.log('  DecisionGuard - decisonData:', decisionData);
     console.log('  DecisionGuard - methodArgs:', h);
-    console.log('  DecisionGuard - paramIds:', paramIds);
+    console.log('  DecisionGuard - paramIds:', paramIds);*/
 
 
-    //return this.decisionProcessorSevice.process(decisionData, methodArgs);
-    return true;
+    return this.decisionProcessorSevice.process(decisionData, []);
+    //return true;
   }
 }

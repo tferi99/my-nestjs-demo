@@ -6,5 +6,7 @@ import { HttpBasicStrategy } from './http-basic-strategy';
 @Module({
   imports: [PassportModule],
   providers: [AuthService, HttpBasicStrategy],
+  exports: [
+    AuthService]
 })
 export class AuthModule {}

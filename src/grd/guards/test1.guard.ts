@@ -1,28 +1,19 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import {
-  ENABLE_GUARD_CONFIGS_KEY,
-  GUARD_ENABLED_DEFAULT,
-  GuardConfig,
-  GuardTarget,
-} from '../decorators/enable-guard.decorator';
+import { Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GuardId } from './guard-ids';
+import { ControllableGuard } from './controllable.guard';
 
 @Injectable()
-export class Test1Guard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export class Test1Guard extends ControllableGuard {
+  constructor(protected reflector: Reflector) {
+    super(reflector);
+  }
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    let enabled = GUARD_ENABLED_DEFAULT
-    const handler = context.getHandler();
-    const existingGuardConfigs = this.reflector.get<Map<GuardTarget, GuardConfig>>(ENABLE_GUARD_CONFIGS_KEY, context.getHandler());
-    if (existingGuardConfigs !== undefined) {
-      const cfg = existingGuardConfigs.get(GuardTarget.T1);
-      if (cfg !== undefined) {
-        enabled = cfg.enabled;
-      }
-    }
-    console.log('Test1Guard - enabled:' + enabled);
-    return enabled;
+  getGuardId(): string {
+    return GuardId.T1;
+  }
+
+  getGuardName(): string {
+    return 'Test1Guard';
   }
 }

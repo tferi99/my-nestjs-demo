@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user';
-import { CurrentUserProvider } from '../decision/current-user-decision';
 import * as _ from 'lodash';
 
 const USERS: User[] = [
