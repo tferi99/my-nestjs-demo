@@ -47,6 +47,7 @@ export const EnableGuard = (guardConfig: GuardConfig) => {
 }
 */
 export const EnableGuard = (guardConfig: GuardConfig) => {
+  console.log('EnableGuard factory: ', guardConfig);
   const factory = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     const existingGuardConfigs: Map<GuardTarget, GuardConfig> = Reflect.getOwnMetadata(ENABLE_GUARD_CONFIGS_KEY, target, propertyKey) || new Map<GuardTarget, GuardConfig>();
     Reflect.defineMetadata(ENABLE_GUARD_CONFIGS_KEY, existingGuardConfigs, descriptor.value);

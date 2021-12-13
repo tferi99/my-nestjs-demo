@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import {
   ENABLE_GUARD_CONFIGS_KEY,
-  ENABLE_GUARD_KEY, GUARD_ENABLED_DEFAULT,
+  GUARD_ENABLED_DEFAULT,
   GuardConfig,
   GuardTarget,
 } from '../decorators/enable-guard.decorator';
@@ -15,6 +15,9 @@ export class Global1Guard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     let enabled = GUARD_ENABLED_DEFAULT
     const existingGuardConfigs = this.reflector.get<Map<GuardTarget, GuardConfig>>(ENABLE_GUARD_CONFIGS_KEY, context.getHandler());
+    const handler = context.getHandler();
+    const e2 = this.reflector.get<Map<GuardTarget, GuardConfig>>(ENABLE_GUARD_CONFIGS_KEY, context.getHandler());
+    console.log('existingGuardConfigs:', existingGuardConfigs);
     if (existingGuardConfigs !== undefined) {
       const cfg = existingGuardConfigs.get(GuardTarget.G1);
       if (cfg !== undefined) {

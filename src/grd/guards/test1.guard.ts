@@ -14,6 +14,7 @@ export class Test1Guard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     let enabled = GUARD_ENABLED_DEFAULT
+    const handler = context.getHandler();
     const existingGuardConfigs = this.reflector.get<Map<GuardTarget, GuardConfig>>(ENABLE_GUARD_CONFIGS_KEY, context.getHandler());
     if (existingGuardConfigs !== undefined) {
       const cfg = existingGuardConfigs.get(GuardTarget.T1);
