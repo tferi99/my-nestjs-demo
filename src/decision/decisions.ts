@@ -43,4 +43,11 @@ export class Decisions implements Decision {
   validate(): void {
     this.items.forEach((item) => item.validate());
   }
+
+  toString(): string {
+    let s = 'Decisions-' + this.op + '[\n';
+    this.items.forEach((item: Decision) => s += '      ' + item + '\n');
+    s += '    ]\n';
+    return s;
+  }
 }

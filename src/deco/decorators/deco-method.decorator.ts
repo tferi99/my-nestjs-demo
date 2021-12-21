@@ -15,7 +15,7 @@ export function DecoMethod(label: string): any {
   const factory = (target: any, propertyName: string, descriptor: PropertyDescriptor) => {
     const childFunction = descriptor.value;
     descriptor.value = (...args: any[]) => {
-      console.log(prefix + ' child function');
+      console.log(prefix + ' ==> ' + childFunction.name + '(' + args + ')');
       return childFunction.apply(this, args);
     };
     return descriptor;

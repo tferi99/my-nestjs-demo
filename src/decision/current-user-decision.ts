@@ -17,6 +17,10 @@ export class CurrentUserDecision implements Decision {
   }
 
   validate(): void {}
+
+  toString(): string {
+    return 'CurrentUserDecision';
+  }
 }
 
 export type UserIdRetrieveFunction = (data: any) => number; // User.id is number

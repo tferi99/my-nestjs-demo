@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ClassInfoTrace } from './decorators/class-info-trace';
 import { Result } from './types';
 import { Required, Validate } from './decorators/validate.decorator';
@@ -14,6 +14,10 @@ import { DecisionExpr } from '../decision/decision-expr.decorator';
 import { Decisions, Op } from '../decision/decisions';
 import { CurrentUserDecision } from '../decision/current-user-decision';
 import { DecisionGuard } from '../decision/decision.guard';
+import { EnableGuard } from '../grd/decorators/enable-guard.decorator';
+import { GuardId } from '../grd/guards/guard-ids';
+import { DecisionInterceptor } from '../decision/decision.interceptor';
+import { MetadataDumpGuard } from '../common/guard/MetadataDump.guard';
 
 @Controller('deco')
 @ClassInfoTrace
@@ -64,5 +68,17 @@ export class DecoController {
     console.log('======================================> start of updateUser()');
     console.log('end of updateUser()');
     return { hello: u.name };
+  }
+
+  @Get('testIntercept')
+  @UseGuards(MetadataDumpGuard, HttpBasicAuthGuard)
+  @EnableGuard({ target: GuardId.G1, enabled: true })
+  @DecisionExpr(new Decisions(Op.AND, [
+    new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })
+  ]))
+  @UseInterceptors(DecisionInterceptor)
+  @DecoMethod('TI')
+  testIntercept(@Query('q1') q1: string, @Query('q2') q2: string): string {
+    return 'testIntercept OK';
   }
 }

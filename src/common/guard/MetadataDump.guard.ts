@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { GUARDS_METADATA } from '@nestjs/common/constants';
+import { GUARDS_METADATA, INTERCEPTORS_METADATA } from '@nestjs/common/constants';
 import { ENABLE_GUARD_CONFIGS_KEY, GuardConfig } from '../../grd/decorators/enable-guard.decorator';
 
 @Injectable()
@@ -35,8 +35,10 @@ export class MetadataDumpGuard implements CanActivate {
     if (key === GUARDS_METADATA) {
       this.printGuardsMetadata(key, target);
       return true;
-    }
-    if (key == ENABLE_GUARD_CONFIGS_KEY) {
+    } else if (key === INTERCEPTORS_METADATA) {
+      this.printInterceptorMetadata(key, target);
+      return true;
+    } else if (key == ENABLE_GUARD_CONFIGS_KEY) {
       this.printEnableGuardMetadata(key, target);
       return true;
     }
@@ -48,11 +50,19 @@ export class MetadataDumpGuard implements CanActivate {
   }
 
   private printGuardsMetadata(key: any, target: any): void {
-    const guards = Reflect.getMetadata(key, target);
-    let val = 'Guards[';
+    this.printMetadataList(key, target, 'Guards');
+  }
+
+  private printInterceptorMetadata(key: any, target: any): void {
+    this.printMetadataList(key, target, 'Interceptors');
+  }
+
+  private printMetadataList(key: any, target: any, label: string): void {
+    const items = Reflect.getMetadata(key, target);
+    let val = label + '[';
     let first = true;
-    guards.forEach((guard) => {
-      val += first ? guard.name : ', ' + guard.name;
+    items.forEach((intr) => {
+      val += first ? intr.name : ', ' + intr.name;
       first = false;
     });
     val += ']';

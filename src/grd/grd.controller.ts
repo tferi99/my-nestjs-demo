@@ -5,6 +5,8 @@ import { EnableGuard } from './decorators/enable-guard.decorator';
 import { MetadataDumpGuard } from '../common/guard/MetadataDump.guard';
 import { GuardId } from './guards/guard-ids';
 import { DecoMethod } from '../deco/decorators/deco-method.decorator';
+import { HttpBasicAuthGuard } from '../auth/http-basic-auth-guard';
+import { DecisionGuard } from '../decision/decision.guard';
 
 @Controller('grd')
 @SetMetadata('ClassMeta1', 'cica')
