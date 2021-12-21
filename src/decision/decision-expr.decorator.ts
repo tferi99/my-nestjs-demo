@@ -17,11 +17,11 @@ export const DecisionExpr = (data: Decision): MethodDecorator => {
     Reflect.defineMetadata(DECISION_DATA_KEY, data, descriptor.value);
     Reflect.defineMetadata(PARAMS_IDS_KEY, markedParams, descriptor.value);
 
-    const childFunction = descriptor.value;
+/*    const childFunction = descriptor.value;
     descriptor.value = (...args: any[]) => {
       console.log('DecisionExpr child function - args:', args);
       return childFunction.apply(this, args);
-    };
+    };*/
 
     Reflect.defineMetadata(DECISION_DATA_KEY, data, descriptor.value);
     Reflect.defineMetadata(PARAMS_IDS_KEY, markedParams, descriptor.value);

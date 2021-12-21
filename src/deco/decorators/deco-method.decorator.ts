@@ -13,11 +13,15 @@ export function DecoMethod(label: string): any {
   console.log(prefix + ' factory');
 
   const factory = (target: any, propertyName: string, descriptor: PropertyDescriptor) => {
-    const childFunction = descriptor.value;
-    descriptor.value = (...args: any[]) => {
-      console.log(prefix + ' ==> ' + childFunction.name + '(' + args + ')');
-      return childFunction.apply(this, args);
-    };
+    const originalMethod = descriptor.value;
+/*    descriptor.value = (...args: any[]) => {
+      console.log(prefix + ' ==> ' + originalMethod.name + '(' + args + ')');
+      return originalMethod.apply(this, args);
+    };*/
+      descriptor.value = function(...args: any[]) {
+          console.log(prefix + ' ==> ' + originalMethod.name + '(' + args + ')');
+          return originalMethod.apply(this, args);
+        };
     return descriptor;
   }
   return factory;

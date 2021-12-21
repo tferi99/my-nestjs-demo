@@ -14,11 +14,23 @@ export class MetadataDumpGuard implements CanActivate {
     console.log(`=== MetadataDumpGuard: ${clazz.name}.${handler.name}() ===`);
 
     // class
+    MetadataDumpGuard.printClassMetadata(clazz);
+
+    // method
+    MetadataDumpGuard.printHandlerMetadata(handler);
+
+    console.log('--------------------------------------');
+    return true;
+  }
+
+  //----------------------------- utils -----------------------------
+  public static printClassMetadata(clazz: any) {
     console.log('Class:');
     const classKeys = Reflect.getMetadataKeys(clazz);
     classKeys.forEach((key) => console.log('  - [' + key + ']: ' + Reflect.getMetadata(key, clazz)));
+  }
 
-    // method
+  public static printHandlerMetadata(handler: any) {
     console.log('Method:');
     const methodKeys = Reflect.getMetadataKeys(handler);
     methodKeys.forEach((key) => {
@@ -26,12 +38,10 @@ export class MetadataDumpGuard implements CanActivate {
         this.printMetadata(key, Reflect.getMetadata(key, handler));
       }
     });
-
-    console.log('--------------------------------------');
-    return true;
   }
 
-  handleBuiltInMetadata(key: any, target: any): boolean {
+  //----------------------------- helpers -----------------------------
+  private static handleBuiltInMetadata(key: any, target: any): boolean {
     if (key === GUARDS_METADATA) {
       this.printGuardsMetadata(key, target);
       return true;
@@ -45,19 +55,19 @@ export class MetadataDumpGuard implements CanActivate {
     return false;
   }
 
-  private printMetadata(key: any, value: any) {
+  private static printMetadata(key: any, value: any) {
     console.log('  - [' + key + ']: ' + value);
   }
 
-  private printGuardsMetadata(key: any, target: any): void {
+  private static printGuardsMetadata(key: any, target: any): void {
     this.printMetadataList(key, target, 'Guards');
   }
 
-  private printInterceptorMetadata(key: any, target: any): void {
+  private static printInterceptorMetadata(key: any, target: any): void {
     this.printMetadataList(key, target, 'Interceptors');
   }
 
-  private printMetadataList(key: any, target: any, label: string): void {
+  private static printMetadataList(key: any, target: any, label: string): void {
     const items = Reflect.getMetadata(key, target);
     let val = label + '[';
     let first = true;
@@ -69,7 +79,7 @@ export class MetadataDumpGuard implements CanActivate {
     this.printMetadata(key, val);
   }
 
-  private printEnableGuardMetadata(key: any, target: any) {
+  private static printEnableGuardMetadata(key: any, target: any) {
     const data: Map<string, GuardConfig> = Reflect.getMetadata(key, target);
     this.printMetadata(key, '...');
     console.log('    ...', data);

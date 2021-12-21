@@ -79,6 +79,15 @@ export class DecoController {
   @UseInterceptors(DecisionInterceptor)
   @DecoMethod('TI')
   testIntercept(@Query('q1') q1: string, @Query('q2') q2: string): string {
+    console.log('testIntercept called!!!');
+    MetadataDumpGuard.printClassMetadata(DecoController);
+    MetadataDumpGuard.printHandlerMetadata(this.testIntercept);
+
+    this.printHello();
     return 'testIntercept OK';
+  }
+
+  private printHello() {
+    console.log('HELLLOOOOOOOOOOOO!!!!!!!!!!!!!!!!!!!!!!!!');
   }
 }
