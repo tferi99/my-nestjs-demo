@@ -5,7 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { DECISION_DATA_KEY, DECISION_ARGS_PARAMS_KEY } from './decision-expr.decorator';
 import { DecisionProcessorSevice } from './decision-processor.service';
 import { ParamIndexes, PARAMS_IDS_KEY } from '../deco/decorators/param-to-metadata.decorator';
-import { Decision } from './decisions';
+import { Decision } from './decision-types';
 
 @Injectable()
 export class DecisionGuard implements CanActivate {

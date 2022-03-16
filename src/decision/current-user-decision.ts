@@ -1,5 +1,5 @@
 import { User } from '../auth/user';
-import { Decision, DecisionContext } from './decisions';
+import { Decision, DecisionContext } from './decision-types';
 
 export interface CurrentUserProvider {
   getCurrentUser(): User;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { Decision } from './decisions';
+import { Decision } from './decision-types';
 
 @Injectable()
 export class DecisionProcessorSevice {

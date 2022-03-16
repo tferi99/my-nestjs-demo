@@ -8,25 +8,24 @@ import { HttpBasicAuthGuard } from '../auth/http-basic-auth-guard';
 import { Deco } from './decorators/deco.decorator';
 import { Deco2 } from './decorators/deco2.decorator';
 import { Deco3 } from './decorators/deco3.decorator';
-import { DecoMethod } from './decorators/deco-method.decorator';
-import { Global1Guard } from '../grd/guards/global1.guard';
 import { DecisionExpr } from '../decision/decision-expr.decorator';
-import { Decisions, Op } from '../decision/decisions';
+import { Decisions, Op } from '../decision/decision-types';
 import { CurrentUserDecision } from '../decision/current-user-decision';
 import { DecisionGuard } from '../decision/decision.guard';
 import { EnableGuard } from '../grd/decorators/enable-guard.decorator';
 import { GuardId } from '../grd/guards/guard-ids';
 import { DecisionInterceptor } from '../decision/decision.interceptor';
 import { MetadataDumpGuard } from '../common/guard/MetadataDump.guard';
+import { CurrentUser } from '../grd/decorators/current-user.decorator';
 
 @Controller('deco')
 @ClassInfoTrace
-@Deco({ label: 'class DecoController' })
+//@Deco({ label: 'class DecoController' })
 export class DecoController {
   text: string;
 
   @Get('test')
-  @Deco({ label: 'test()' })
+  //@Deco({ label: 'test()' })
   @UseGuards(HttpBasicAuthGuard)
   test(@Req() req): string {
     console.log('test - logged in:', req.user);
@@ -34,14 +33,14 @@ export class DecoController {
   }
 
   @Get('test2')
-  @Deco({ label: 'test2()' })
-  @Deco2({ label: 'test2()' })
-  @Deco3({ label: 'test2()' })
+  //@Deco({ label: 'test2()' })
+  //@Deco2({ label: 'test2()' })
+  //@Deco3({ label: 'test2()' })
   test2(): string {
     return 'ok';
   }
 
-  @Get('testValid')
+/*  @Get('testValid')
   @Validate
   validTest(
     @Query('param1') @Required @Deco({ label: 'param1' }) param1: string,
@@ -49,7 +48,7 @@ export class DecoController {
     @Query('param2') @Deco({ label: 'param3' }) param3: string
   ): Result {
     return { message: 'ok' };
-  }
+  }*/
 
   /**
    * Only current user OR root can update user.
@@ -73,12 +72,16 @@ export class DecoController {
   @Get('testIntercept')
   @UseGuards(MetadataDumpGuard, HttpBasicAuthGuard)
   @EnableGuard({ target: GuardId.G1, enabled: true })
+  @UseInterceptors(DecisionInterceptor)
+//  @DecoMethod('TI')
   @DecisionExpr(new Decisions(Op.AND, [
     new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })
   ]))
-  @UseInterceptors(DecisionInterceptor)
-  @DecoMethod('TI')
-  testIntercept(@Query('q1') q1: string, @Query('q2') q2: string): string {
+  testIntercept(
+    @Query('q1') @ParamId('p1') q1: string,
+    @Query('q2') @ParamId('p2') q2: string,
+    @CurrentUser('id') @ParamId('user') userId): string
+  {
     console.log('testIntercept called!!!');
     MetadataDumpGuard.printClassMetadata(DecoController);
     MetadataDumpGuard.printHandlerMetadata(this.testIntercept);

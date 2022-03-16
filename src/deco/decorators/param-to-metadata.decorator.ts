@@ -6,6 +6,7 @@ export const PARAMS_IDS_KEY = 'ParamsIds';
 
 export function ParamId(id: string): any {
   return function (target: any, propertyKey: string | symbol, parameterIndex: number) {
+    console.log('FACTORY - @ParamId: ', id);
     const existingParameters: ParamIndexes = Reflect.getOwnMetadata(PARAMS_IDS_KEY, target, propertyKey) || new Map<string, number>();
     const existing = existingParameters.get(id);
     if (existing) {
