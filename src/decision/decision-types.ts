@@ -46,7 +46,7 @@ export class Decisions implements Decision {
 
   toString(): string {
     let s = 'Decisions-' + this.op + '[\n';
-    this.items.forEach((item: Decision) => s += '      ' + item + '\n');
+    this.items.forEach((item: Decision) => (s += '      ' + item + '\n'));
     s += '    ]\n';
     return s;
   }

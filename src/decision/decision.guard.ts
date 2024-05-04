@@ -11,8 +11,7 @@ import { Decision } from './decision-types';
 export class DecisionGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private decisionProcessorSevice: DecisionProcessorSevice,
-//    private authService: AuthService
+    private decisionProcessorSevice: DecisionProcessorSevice, //    private authService: AuthService
   ) {}
 
   canActivate(ctx: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
@@ -23,12 +22,11 @@ export class DecisionGuard implements CanActivate {
     const markedParams: ParamIndexes = this.reflector.get<ParamIndexes>(PARAMS_IDS_KEY, handler);
     const c = ctx.switchToHttp();
 
-
     console.log('  DecisionGuard - decisonData:', decisionData);
     console.log('  DecisionGuard - markedParams:', markedParams);
-//    console.log('  DecisionGuard - methodArgs:', methodArgs);
+    //    console.log('  DecisionGuard - methodArgs:', methodArgs);
 
-/*    const roles: string[] = this.reflector.get<string[]>('roles', ctx.getHandler());
+    /*    const roles: string[] = this.reflector.get<string[]>('roles', ctx.getHandler());
 
     const methodArgs = this.reflector.get<any[]>(DECISION_ARGS_PARAMS_KEY, ctx.getHandler());
     const paramIds = this.reflector.get<ParamIndexes>(PARAMS_IDS_KEY, ctx.getHandler());
@@ -38,7 +36,6 @@ export class DecisionGuard implements CanActivate {
     console.log('  DecisionGuard - roles:', roles);
     console.log('  DecisionGuard - methodArgs:', h);
     console.log('  DecisionGuard - paramIds:', paramIds);*/
-
 
     return this.decisionProcessorSevice.process(decisionData, []);
     //return true;

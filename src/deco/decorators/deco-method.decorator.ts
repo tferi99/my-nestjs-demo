@@ -14,15 +14,15 @@ export function DecoMethod(label: string): any {
 
   const factory = (target: any, propertyName: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
-/*    descriptor.value = (...args: any[]) => {
+    /*    descriptor.value = (...args: any[]) => {
       console.log(prefix + ' ==> ' + originalMethod.name + '(' + args + ')');
       return originalMethod.apply(this, args);
     };*/
-      descriptor.value = function(...args: any[]) {
-          console.log(prefix + ' ==> ' + originalMethod.name + '(' + args + ')');
-          return originalMethod.apply(this, args);
-        };
+    descriptor.value = function (...args: any[]) {
+      console.log(prefix + ' ==> ' + originalMethod.name + '(' + args + ')');
+      return originalMethod.apply(this, args);
+    };
     return descriptor;
-  }
+  };
   return factory;
 }

@@ -12,7 +12,7 @@ import { DecisionGuard } from '../decision/decision.guard';
 @SetMetadata('ClassMeta1', 'cica')
 export class GrdController {
   @Get('testGuardControl')
-/*  @SetMetadata('MethodMeta1', 'kutya')
+  /*  @SetMetadata('MethodMeta1', 'kutya')
   @UseGuards(MetadataDumpGuard, Test1Guard, Test2Guard)
   @EnableGuard({ target: GuardId.G1, enabled: true })
   @EnableGuard({ target: GuardId.T1, enabled: true })

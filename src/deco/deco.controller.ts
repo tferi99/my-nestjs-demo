@@ -40,7 +40,7 @@ export class DecoController {
     return 'ok';
   }
 
-/*  @Get('testValid')
+  /*  @Get('testValid')
   @Validate
   validTest(
     @Query('param1') @Required @Deco({ label: 'param1' }) param1: string,
@@ -60,9 +60,7 @@ export class DecoController {
   @Put('user')
   //@UseGuards(HttpBasicAuthGuard)
   @UseGuards(HttpBasicAuthGuard, DecisionGuard)
-  @DecisionExpr(new Decisions(Op.AND, [
-    new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })
-  ]))
+  @DecisionExpr(new Decisions(Op.AND, [new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })]))
   updateUser(@ParamId('cica') cica: string, @ParamId('user') @Body() u: User, @ParamId('etc') etc): any {
     console.log('======================================> start of updateUser()');
     console.log('end of updateUser()');
@@ -73,15 +71,9 @@ export class DecoController {
   @UseGuards(MetadataDumpGuard, HttpBasicAuthGuard)
   @EnableGuard({ target: GuardId.G1, enabled: true })
   @UseInterceptors(DecisionInterceptor)
-//  @DecoMethod('TI')
-  @DecisionExpr(new Decisions(Op.AND, [
-    new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })
-  ]))
-  testIntercept(
-    @Query('q1') @ParamId('p1') q1: string,
-    @Query('q2') @ParamId('p2') q2: string,
-    @CurrentUser('id') @ParamId('user') userId): string
-  {
+  //  @DecoMethod('TI')
+  @DecisionExpr(new Decisions(Op.AND, [new CurrentUserDecision({ sourceParamId: 'user', func: (user: User) => user.id })]))
+  testIntercept(@Query('q1') @ParamId('p1') q1: string, @Query('q2') @ParamId('p2') q2: string, @CurrentUser('id') @ParamId('user') userId): string {
     console.log('testIntercept called!!!');
     MetadataDumpGuard.printClassMetadata(DecoController);
     MetadataDumpGuard.printHandlerMetadata(this.testIntercept);

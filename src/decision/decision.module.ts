@@ -3,15 +3,8 @@ import { DecisionProcessorSevice } from './decision-processor.service';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    AuthModule
-  ],
-  providers: [
-    DecisionProcessorSevice
-  ],
-  exports: [
-    DecisionProcessorSevice
-  ]
+  imports: [AuthModule],
+  providers: [DecisionProcessorSevice],
+  exports: [DecisionProcessorSevice],
 })
-export class DecisionModule {
-}
+export class DecisionModule {}

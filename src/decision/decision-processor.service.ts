@@ -7,11 +7,11 @@ export class DecisionProcessorSevice {
   constructor(private authService: AuthService) {}
 
   process(d: Decision, args: any[]): boolean {
-/*    const ctx: DecisionContext = {
+    /*    const ctx: DecisionContext = {
       currentUserProvider: this.authService,
       args,
     };
     return d.evaluate(ctx);*/
-return true;
+    return true;
   }
 }

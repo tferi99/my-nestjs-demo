@@ -15,10 +15,9 @@ export const EnableGuard = (guardConfig: GuardConfig) => {
     Reflect.defineMetadata(ENABLE_GUARD_CONFIGS_KEY, existingGuardConfigs, descriptor.value);
 
     existingGuardConfigs.set(guardConfig.target, guardConfig);
-    Reflect.defineMetadata( ENABLE_GUARD_CONFIGS_KEY, existingGuardConfigs, target, propertyKey);
+    Reflect.defineMetadata(ENABLE_GUARD_CONFIGS_KEY, existingGuardConfigs, target, propertyKey);
 
     console.log('EnableGuard changed:', existingGuardConfigs);
-  }
+  };
   return factory;
-}
-
+};
